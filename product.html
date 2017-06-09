@@ -53,6 +53,103 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
   <script type="text/javascript">
+ 
+  $(document).ready(function () {
+    var serviceUrl = "https://pgecommerce.azure-api.net/products/";
+    var pid = getUrlVars()["id"];// getting product id from url
+    $.get(serviceUrl + pid, function (data, err) {  
+      renderProduct(data);     
+    });
+  })
+
+function renderProduct(product){
+  render(product);
+  if(product.Reviews){
+    
+    if(product.Reviews.Results)
+      userReview(product.Reviews.Results);
+    else
+      $(".user_review").append('<div class="review">No reviews available. Be the lucky one to write first !!!</div>');
+    
+    if(product.Reviews.Statistics && product.Reviews.Statistics.AverageRating)
+      $("#rateYo").rateYo({
+        rating: Number(product.Reviews.Statistics.AverageRating),
+        readOnly: true
+      });
+  }  
+}
+// Read a page's GET URL variables and return them as an associative array.
+function getUrlVars() {
+  var vars = [], hash;
+  var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+  for (var i = 0; i < hashes.length; i++) {
+    hash = hashes[i].split('=');
+    vars.push(hash[0]);
+    vars[hash[0]] = hash[1];
+  }
+  return vars;
+}
+
+//rendering product
+function render(res) {
+  var a='';
+  $(".brand").html(res.product[0].brand);
+  if(res.assets && res.assets.length > 0 && res.assets[0].url){
+    a = '<img src="' + res.assets[0].url + '"/>';
+  }
+
+  a = a + '<h3>' + res.product[0].name + '</h3><p>' + res.product[0].description + '</p>';
+  $(".render").prepend(a);
+}
+
+//rendering user review
+function userReview(res) {
+  var b = '';
+  if(res.Review && res.Review.length > 0){
+    for (i in res.Review) {
+      b += '<div class="review"><h4>' + res.Review[i].Title + '</h4><p>' + res.Review[i].ReviewText + '</p><p>Submitted by ' + '<b><i>' + res.Review[i].User + '</i></b>' + ' on ' + res.Review[i].SubmittedOn + '</p><div>';
+    }
+  }
+  else {
+    b = '<div class="review">No reviews available. Be the lucky one to write first !!!</div>';
+  }
+  $(".user_review").append(b);
+}
+  </script>
+
+</head>
+<body>
+<div class="jumbotron text-center">
+  <h1 class="brand"></h1>
+</div>
+  
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+    </div>
+    <div class="col-sm-4 render">
+     <div id="rateYo"></div>
+     <div>   
+     <input type="text" name="quantity" value="1" size="10" />
+     <button>BuyNow</button>
+     </div>   
+    </div>
+    <div class="col-sm-4">
+    </div>
+  </div>
+  </div>
+  <div class="container">
+   <div class="row user_review">
+    <h3>User Reviews</h4> 
+  </div>    
+  </div>    
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-body">Copyright: 2017</div>
+  </div>
+</div>
+<script>
+   /*
   var result = {
   "product": [
     {
@@ -177,85 +274,7 @@
     }
   }
 }
-
-$(document).ready(function () {
-  var pid = getUrlVars()["id"];// getting product id from url
-  $.get("https://pgecommerce.azure-api.net/products/" + pid, function (data, err) {
-    if (err) { console.log(err) }
-    else {
-      console.log(data);
-    }
-  });
-  render(result);
-  userReview(result.Reviews.Results);
-  $("#rateYo").rateYo({
-    rating: Number(result.Reviews.Statistics.AverageRating),
-    readOnly: true
-  });
-})
-
-// Read a page's GET URL variables and return them as an associative array.
-function getUrlVars() {
-  var vars = [], hash;
-  var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-  for (var i = 0; i < hashes.length; i++) {
-    hash = hashes[i].split('=');
-    vars.push(hash[0]);
-    vars[hash[0]] = hash[1];
-  }
-  return vars;
-}
-
-//rendering product
-function render(res) {
-  var a='';
-  $(".brand").html(res.product[0].brand);
-  a = '<img src="' + res.assets[0].url + '"/><h3>' + res.product[0].name + '</h3><p>' + res.product[0].description + '</p>';
-  $(".render").prepend(a);
-}
-
-//rendering user review
-function userReview(res) {
-  var b = '';
-  for (i in res.Review) {
-    b += '<div class="review"><h4>' + res.Review[i].Title + '</h4><p>' + res.Review[i].ReviewText + '</p><p>Submitted by ' + '<b><i>' + res.Review[i].User + '</i></b>' + ' on ' + res.Review[i].SubmittedOn + '</p><div>';
-  }
-  $(".user_review").append(b);
-
-}
-  </script>
-
-</head>
-<body>
-<div class="jumbotron text-center">
-  <h1 class="brand"></h1>
-</div>
-  
-<div class="container">
-  <div class="row">
-    <div class="col-sm-4">
-    </div>
-    <div class="col-sm-4 render">
-     <div id="rateYo"></div>
-     <div>   
-     <input type="text" name="quantity" value="1" size="10" />
-     <button>BuyNow</button>
-     </div>   
-    </div>
-    <div class="col-sm-4">
-    </div>
-  </div>
-  </div>
-  <div class="container">
-   <div class="row user_review">
-    <h3>User Reviews</h4> 
-  </div>    
-  </div>    
-<div class="container">
-  <div class="panel panel-default">
-    <div class="panel-body">Copyright: 2017</div>
-  </div>
-</div>
-
+*/
+</script>
 </body>
 </html>
