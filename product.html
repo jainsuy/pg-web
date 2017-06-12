@@ -1,282 +1,322 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>P&G Product Details Page</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
-  <style type="text/css">
-	.col-sm-4 > img {
-    float: left;
-    margin-right: 40px;
-	}
-	.container > .row > .col-sm-4.render {
-    width: 900px;
-}
- .jq-ry-container > .jq-ry-group-wrapper > .jq-ry-group.jq-ry-rated-group {
-    left: 495px;}
-	input[name="quantity"] {
-    margin-top: 15px;
-}
-.container > .user_review > h3 {
-    font-weight: bold;
-    margin-bottom: 0;
-    margin-top: 80px;
-    text-transform: uppercase;
-}
-.container > .user_review .review {
-    margin-top: 40px;
-	float:left;
-}
-.container > .user_review .review h4 {
-    font-size: 16px;
-    font-weight: bold;
-}
-.container > .user_review .review p {
-    margin-bottom: 0;
-}
-.container .panel.panel-default {
-    float: left;
-    margin-left: -15px;
-    margin-top: 60px;
-    width: 100%;
-}
-.container > .user_review > h3 + div.review {
-    margin-top: 15px;
-}
-.container > .row > .col-sm-4.render > h3 {
-    font-weight: bold;
-}
-  </style>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
-  <script type="text/javascript">
- 
-  $(document).ready(function () {
-    var productServiceUrl = "https://pgecommerce.azure-api.net/products/";
-	var productOrderServiceUrl = 'https://pgecommerce.azure-api.net/orders';
-	
-    var pid = getUrlVars()["id"];// getting product id from url
-    $.get(productServiceUrl + pid, function (data, err) {  
-      renderProduct(data);     
-    });
-  })
+    <title>P&G Product Details Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+    <style type="text/css">
+        .col-sm-4 > img {
+            float: left;
+            margin-right: 40px;
+        }
 
-function renderProduct(product){
-  render(product);
-  if(product.Reviews){
-    
-    if(product.Reviews.Results)
-      userReview(product.Reviews.Results);
-    else
-      $(".user_review").append('<div class="review">No reviews available. Be the lucky one to write first !!!</div>');
-    
-    if(product.Reviews.Statistics && product.Reviews.Statistics.AverageRating)
-      $("#rateYo").rateYo({
-        rating: Number(product.Reviews.Statistics.AverageRating),
-        readOnly: true
-      });
-  }  
-}
-// Read a page's GET URL variables and return them as an associative array.
-function getUrlVars() {
-  var vars = [], hash;
-  var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-  for (var i = 0; i < hashes.length; i++) {
-    hash = hashes[i].split('=');
-    vars.push(hash[0]);
-    vars[hash[0]] = hash[1];
-  }
-  return vars;
-}
+        .container > .row > .col-sm-4.render {
+            width: 900px;
+        }
 
-//rendering product
-function render(res) {
-  var a='';
-  $(".brand").html(res.product[0].brand);
-  if(res.assets && res.assets.length > 0 && res.assets[0].url){
-    a = '<img src="' + res.assets[0].url + '"/>';
-  }
+        .jq-ry-container > .jq-ry-group-wrapper > .jq-ry-group.jq-ry-rated-group {
+            left: 495px;
+        }
 
-  a = a + '<h3>' + res.product[0].name + '</h3><p>' + res.product[0].description + '</p>';
-  $(".render").prepend(a);
-}
+        input[name="quantity"] {
+            margin-top: 15px;
+        }
 
-//rendering user review
-function userReview(res) {
-  var b = '';
-  if(res.Review && res.Review.length > 0){
-    for (i in res.Review) {
-      b += '<div class="review"><h4>' + res.Review[i].Title + '</h4><p>' + res.Review[i].ReviewText + '</p><p>Submitted by ' + '<b><i>' + res.Review[i].User + '</i></b>' + ' on ' + res.Review[i].SubmittedOn + '</p><div>';
-    }
-  }
-  else {
-    b = '<div class="review">No reviews available. Be the lucky one to write first !!!</div>';
-  }
-  $(".user_review").append(b);
-}
-  </script>
+        .container > .user_review > h3 {
+            font-weight: bold;
+            margin-bottom: 0;
+            margin-top: 80px;
+            text-transform: uppercase;
+        }
+
+        .container > .user_review .review {
+            margin-top: 40px;
+            float: left;
+        }
+
+            .container > .user_review .review h4 {
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            .container > .user_review .review p {
+                margin-bottom: 0;
+            }
+
+        .container .panel.panel-default {
+            float: left;
+            margin-left: -15px;
+            margin-top: 60px;
+            width: 100%;
+        }
+
+        .container > .user_review > h3 + div.review {
+            margin-top: 15px;
+        }
+
+        .container > .row > .col-sm-4.render > h3 {
+            font-weight: bold;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var productServiceUrl = "https://pgecommerce.azure-api.net/products/";            
+            var buyNowServiceUrl ="https://pgecommerce.azure-api.net/buynow";
+
+            var gtin = getUrlVars()["id"];// getting product id from url
+            $('#gtin').val(gtin);
+            $.get(productServiceUrl + gtin, function (data) {
+                renderProduct(data);
+				$("#container").show();
+            }).fail(function () {
+                $("#container").hide();
+                $("#error-panel").show();
+            });
+
+            $("#btnBuyNow").on("click", function (e) {
+                //e.preventDefault();
+                var gtin = $('#gtin').val();
+                var qty = $("#quantity").val();
+                console.log('Place order for gtin: ' + gtin + "  and Qty: " + qty);
+                
+                $.ajax({
+                    type: "POST",
+                    url: buyNowServiceUrl,
+                    data: { "gtin": gtin, "orderQuantity": qty  },                    
+                    success: function (result) {
+                        alert('Order placed successfully!!!');
+                    },
+                    error: function (result) {
+                        alert('Opps, something went wrong. Please try again later.');
+                    }
+                });                
+            });
+        });
+
+        function renderProduct(product) {
+            render(product);
+            if (product.Reviews) {
+
+                if (product.Reviews.Results)
+                    userReview(product.Reviews.Results);
+                else
+                    $(".user_review").append('<div class="review">No reviews available. Be the lucky one to write first !!!</div>');
+
+                if (product.Reviews.Statistics && product.Reviews.Statistics.AverageRating)
+                    $("#rateYo").rateYo({
+                        rating: Number(product.Reviews.Statistics.AverageRating),
+                        readOnly: true
+                    });
+            }
+        }
+        // Read a page's GET URL variables and return them as an associative array.
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+
+        //rendering product
+        function render(res) {
+            var a = '';
+            $(".brand").html(res.product[0].brand);
+            
+            if (res.assets && res.assets.length > 0 && res.assets[0].url) {
+                a = '<img src="' + res.assets[0].url + '"/>';
+            }            
+            a = a + '<h3>' + res.product[0].name + '</h3><p>' + res.product[0].description + '</p>';
+            $(".render").prepend(a);
+        }
+
+        //rendering user review
+        function userReview(res) {
+            var b = '';
+            if (res.Review && res.Review.length > 0) {
+                for (i in res.Review) {
+                    b += '<div class="review"><h4>' + res.Review[i].Title + '</h4><p>' + res.Review[i].ReviewText + '</p><p>Submitted by ' + '<b><i>' + res.Review[i].User + '</i></b>' + ' on ' + res.Review[i].SubmittedOn + '</p><div>';
+                }
+            }
+            else {
+                b = '<div class="review">No reviews available. Be the lucky one to write first !!!</div>';
+            }
+            $(".user_review").append(b);
+        }
+    </script>
 
 </head>
 <body>
-<div class="jumbotron text-center">
-  <h1 class="brand"></h1>
-</div>
-  
-<div class="container">
-  <div class="row">
-    <div class="col-sm-4">
+    <div class="jumbotron text-center">
+        <h1 class="brand"></h1>
+        <input type="hidden" id="gtin" name="gtin" />
     </div>
-    <div class="col-sm-4 render">
-     <div id="rateYo"></div>
-     <div>   
-     <input type="text" name="quantity" value="1" size="10" />
-     <button>BuyNow</button>
-     </div>   
+    <div id='error-panel' style="display:none">
+        <h4>Oops simething went wrong. Please try again later.</h4>
     </div>
-    <div class="col-sm-4">
+    <div class="container" id='container' style='display:none'>
+        <div class="row">
+            <div class="col-sm-4">
+            </div>
+            <div class="col-sm-4 render">
+                <div id="rateYo"></div>
+                <div>
+                    <input type="text" id="quantity" name="quantity" value="1" size="10" />
+                    <button id='btnBuyNow'>BuyNow</button>
+                </div>
+            </div>
+            <div class="col-sm-4">
+            </div>
+        </div>
+        <div class="container" id="reviewContainer">
+            <div class="row user_review">
+                <h3>User Reviews</h3>
+            </div>
+        </div>
     </div>
-  </div>
-  </div>
-  <div class="container">
-   <div class="row user_review">
-    <h3>User Reviews</h4> 
-  </div>    
-  </div>    
-<div class="container">
-  <div class="panel panel-default">
-    <div class="panel-body">Copyright: 2017</div>
-  </div>
-</div>
-<script>
-   /*
-  var result = {
-  "product": [
-    {
-      "gtin": "47400656109",
-      "brand": "Gillette",
-      "name": "FUSION5 PROSHIELD RAZOR WITH FLEXBALL TECHNOLOGY",
-      "description": "Gillette Fusion5 ProShield menâ€™s razor, with lubrication before & after the blades, shields from irritation while you shave. It features 5 precision blades for incredible comfort. With Gilletteâ€™s thinnest and finest blades (first 4 blades, same as ProGlide), ProShield allows less tug & pull vs. Fusion5. This razor comes complete with a Precision Trimmer on the back, great for edging tough areas such as under the nose and sideburns. Complete with FlexBall technology, ProShield responds to contours & gets virtually every hair. One razor blade refill equals up to one month of shaves. This Fusion5 ProShield razor can be used with any Fusion5 blade refills.",
-      "bvCode": "000080265628"
-    }
-  ],
-  "lastUpdatedAt": 1496999102518,
-  "assets": [
-    {
-      "gtin": "47400656109",
-      "assettype": "image",
-      "name": "Primary Image",
-      "url": "https://cdn.voyager.pgsitecore.com/en-us/-/media/Gillette/Images/Products/Fusion%20ProShield%20Manual%20Razor/01_ProShieldMan_Pack.jpg?w=460&v=1-20170406064"
-    },
-    {
-      "gtin": "47400656109",
-      "assettype": "image",
-      "name": "Secondary Image",
-      "url": "https://cdn.voyager.pgsitecore.com/en-us/-/media/Gillette/Images/Products/Fusion%20ProShield%20Manual%20Razor/02_ProShieldMan_SHIELD.jpg?w=460&v=1-201704060647"
-    },
-    {
-      "gtin": "47400656109",
-      "assettype": "video",
-      "name": "YouTube Video",
-      "url": "https://www.youtube.com/watch?v=dOWjvbGm16M"
-    }
-  ],
-  "Reviews": {
-    "@xmlns$bv": "http://www.bazaarvoice.com/xs/DataApiQuery/5.4",
-    "Statistics": {
-      "AverageRating": "4.4837",
-      "TotalReviews": "490",
-      "TotalRecommendations": "239"
-    },
-    "Results": {
-      "Review": [
-        {
-          "User": "deswwse",
-          "UserLocation": "kinht",
-          "Rating": "5",
-          "Title": "This Product has great features",
-          "ReviewText": "This Product has great featuresThis Product has great features",
-          "SubmittedOn": "2017-06-01T10:51:57+00:00"
-        },
-        {
-          "User": "Eliyas1989",
-          "UserLocation": null,
-          "Rating": "3",
-          "Title": "this is really good product1",
-          "ReviewText": "this is really good product th1is is really good product this is really good product this is really good product this is really good product",
-          "SubmittedOn": "2017-05-23T20:12:27+00:00"
-        },
-        {
-          "User": "Eliyas1986",
-          "UserLocation": null,
-          "Rating": "3",
-          "Title": "this is really good product",
-          "ReviewText": "this is really good product this is really good product this is really good product this is really good product this is really good product",
-          "SubmittedOn": "2017-05-23T20:05:24+00:00"
-        },
-        {
-          "User": "Eagle",
-          "UserLocation": "Pa.",
-          "Rating": "5",
-          "Title": "Cuts well",
-          "ReviewText": "It glides over the skin well.. A little price but well worth it.. It could use more blade cartledges but love it",
-          "SubmittedOn": "2017-05-10T04:24:16+00:00"
-        },
-        {
-          "User": "Trish",
-          "UserLocation": "Ca",
-          "Rating": "5",
-          "Title": "Love",
-          "ReviewText": "Awesome; never cant go too wrong with gilette razors! Wahhooooooo",
-          "SubmittedOn": "2017-05-06T07:04:08+00:00"
-        },
-        {
-          "User": "Yambu",
-          "UserLocation": "Rahway",
-          "Rating": "4",
-          "Title": "Can't wait to try it.",
-          "ReviewText": "I'm waiting on it to see how good it is. Can't wait to try this razor. It has a lot of potential.",
-          "SubmittedOn": "2017-05-05T04:45:12+00:00"
-        },
-        {
-          "User": "Yambu",
-          "UserLocation": "Rahway",
-          "Rating": "4",
-          "Title": "Can't wait to try it.",
-          "ReviewText": "I'm waiting on it to see how good it is. Can't wait to try this razor. It has a lot of potential.",
-          "SubmittedOn": "2017-05-05T04:45:08+00:00"
-        },
-        {
-          "User": "Mississippi",
-          "UserLocation": "Kentucky",
-          "Rating": "5",
-          "Title": "Highly recommend!",
-          "ReviewText": "This is a great product. I am a female and borrowed a new one from my boy friend really left my legs smooth. Would love some more.",
-          "SubmittedOn": "2017-04-27T06:55:46+00:00"
-        },
-        {
-          "User": "Taetolit",
-          "UserLocation": "1415 Hawkins st.",
-          "Rating": "5",
-          "Title": "Great",
-          "ReviewText": "This great razor for people to use. People need to buy this brush.Goooooooooo buyyyyyyy thisssssss.",
-          "SubmittedOn": "2017-04-19T04:38:36+00:00"
-        },
-        {
-          "User": "Tsecondtonone",
-          "UserLocation": "Seattle",
-          "Rating": "5",
-          "Title": "The best",
-          "ReviewText": "I use this for my head and face and this is the best I have ever use and I shave my head almost every day",
-          "SubmittedOn": "2017-02-16T19:10:29+00:00"
-        }
-      ]
-    }
-  }
-}
-*/
-</script>
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-body">Copyright: 2017</div>
+        </div>
+    </div>
+    <script>
+        /*
+       var result = {
+       "product": [
+         {
+           "gtin": "47400656109",
+           "brand": "Gillette",
+           "name": "FUSION5 PROSHIELD RAZOR WITH FLEXBALL TECHNOLOGY",
+           "description": "Gillette Fusion5 ProShield menâ€™s razor, with lubrication before & after the blades, shields from irritation while you shave. It features 5 precision blades for incredible comfort. With Gilletteâ€™s thinnest and finest blades (first 4 blades, same as ProGlide), ProShield allows less tug & pull vs. Fusion5. This razor comes complete with a Precision Trimmer on the back, great for edging tough areas such as under the nose and sideburns. Complete with FlexBall technology, ProShield responds to contours & gets virtually every hair. One razor blade refill equals up to one month of shaves. This Fusion5 ProShield razor can be used with any Fusion5 blade refills.",
+           "bvCode": "000080265628"
+         }
+       ],
+       "lastUpdatedAt": 1496999102518,
+       "assets": [
+         {
+           "gtin": "47400656109",
+           "assettype": "image",
+           "name": "Primary Image",
+           "url": "https://cdn.voyager.pgsitecore.com/en-us/-/media/Gillette/Images/Products/Fusion%20ProShield%20Manual%20Razor/01_ProShieldMan_Pack.jpg?w=460&v=1-20170406064"
+         },
+         {
+           "gtin": "47400656109",
+           "assettype": "image",
+           "name": "Secondary Image",
+           "url": "https://cdn.voyager.pgsitecore.com/en-us/-/media/Gillette/Images/Products/Fusion%20ProShield%20Manual%20Razor/02_ProShieldMan_SHIELD.jpg?w=460&v=1-201704060647"
+         },
+         {
+           "gtin": "47400656109",
+           "assettype": "video",
+           "name": "YouTube Video",
+           "url": "https://www.youtube.com/watch?v=dOWjvbGm16M"
+         }
+       ],
+       "Reviews": {
+         "@xmlns$bv": "http://www.bazaarvoice.com/xs/DataApiQuery/5.4",
+         "Statistics": {
+           "AverageRating": "4.4837",
+           "TotalReviews": "490",
+           "TotalRecommendations": "239"
+         },
+         "Results": {
+           "Review": [
+             {
+               "User": "deswwse",
+               "UserLocation": "kinht",
+               "Rating": "5",
+               "Title": "This Product has great features",
+               "ReviewText": "This Product has great featuresThis Product has great features",
+               "SubmittedOn": "2017-06-01T10:51:57+00:00"
+             },
+             {
+               "User": "Eliyas1989",
+               "UserLocation": null,
+               "Rating": "3",
+               "Title": "this is really good product1",
+               "ReviewText": "this is really good product th1is is really good product this is really good product this is really good product this is really good product",
+               "SubmittedOn": "2017-05-23T20:12:27+00:00"
+             },
+             {
+               "User": "Eliyas1986",
+               "UserLocation": null,
+               "Rating": "3",
+               "Title": "this is really good product",
+               "ReviewText": "this is really good product this is really good product this is really good product this is really good product this is really good product",
+               "SubmittedOn": "2017-05-23T20:05:24+00:00"
+             },
+             {
+               "User": "Eagle",
+               "UserLocation": "Pa.",
+               "Rating": "5",
+               "Title": "Cuts well",
+               "ReviewText": "It glides over the skin well.. A little price but well worth it.. It could use more blade cartledges but love it",
+               "SubmittedOn": "2017-05-10T04:24:16+00:00"
+             },
+             {
+               "User": "Trish",
+               "UserLocation": "Ca",
+               "Rating": "5",
+               "Title": "Love",
+               "ReviewText": "Awesome; never cant go too wrong with gilette razors! Wahhooooooo",
+               "SubmittedOn": "2017-05-06T07:04:08+00:00"
+             },
+             {
+               "User": "Yambu",
+               "UserLocation": "Rahway",
+               "Rating": "4",
+               "Title": "Can't wait to try it.",
+               "ReviewText": "I'm waiting on it to see how good it is. Can't wait to try this razor. It has a lot of potential.",
+               "SubmittedOn": "2017-05-05T04:45:12+00:00"
+             },
+             {
+               "User": "Yambu",
+               "UserLocation": "Rahway",
+               "Rating": "4",
+               "Title": "Can't wait to try it.",
+               "ReviewText": "I'm waiting on it to see how good it is. Can't wait to try this razor. It has a lot of potential.",
+               "SubmittedOn": "2017-05-05T04:45:08+00:00"
+             },
+             {
+               "User": "Mississippi",
+               "UserLocation": "Kentucky",
+               "Rating": "5",
+               "Title": "Highly recommend!",
+               "ReviewText": "This is a great product. I am a female and borrowed a new one from my boy friend really left my legs smooth. Would love some more.",
+               "SubmittedOn": "2017-04-27T06:55:46+00:00"
+             },
+             {
+               "User": "Taetolit",
+               "UserLocation": "1415 Hawkins st.",
+               "Rating": "5",
+               "Title": "Great",
+               "ReviewText": "This great razor for people to use. People need to buy this brush.Goooooooooo buyyyyyyy thisssssss.",
+               "SubmittedOn": "2017-04-19T04:38:36+00:00"
+             },
+             {
+               "User": "Tsecondtonone",
+               "UserLocation": "Seattle",
+               "Rating": "5",
+               "Title": "The best",
+               "ReviewText": "I use this for my head and face and this is the best I have ever use and I shave my head almost every day",
+               "SubmittedOn": "2017-02-16T19:10:29+00:00"
+             }
+           ]
+         }
+       }
+     }
+     //var buyNowServiceUrl = 'https://pgecommerce.azure-api.net/ord/orders';
+     */
+    </script>
 </body>
 </html>
