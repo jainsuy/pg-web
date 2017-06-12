@@ -55,9 +55,11 @@
   <script type="text/javascript">
  
   $(document).ready(function () {
-    var serviceUrl = "https://pgecommerce.azure-api.net/products/";
+    var productServiceUrl = "https://pgecommerce.azure-api.net/products/";
+	var productOrderServiceUrl = 'https://pgecommerce.azure-api.net/orders';
+	
     var pid = getUrlVars()["id"];// getting product id from url
-    $.get(serviceUrl + pid, function (data, err) {  
+    $.get(productServiceUrl + pid, function (data, err) {  
       renderProduct(data);     
     });
   })

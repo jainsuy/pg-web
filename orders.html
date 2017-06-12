@@ -15,7 +15,7 @@ color: #4A90E2;
 text-decoration: none;
 }
 
-.products {
+.orders {
 display: flex;
 flex-direction: column;
 margin-top: 20px;
@@ -126,49 +126,47 @@ font-weight: bold;
 }
 </style>
 
-<title>Product Catalogue</title>
+<title>Order List</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
 
 <script>
     $(document).ready(function(){
-        var productCMSServiceUrl = 'https://pgecommerce.azure-api.net/cms/products';        
+        var productOrderServiceUrl = 'https://pgecommerce.azure-api.net/ord/orders';        
         
 		var container = document.getElementById('content');
-        $.get(productCMSServiceUrl, function(data, status){
+        $.get(productOrderServiceUrl, function(data, status){
             console.log("Data: " + data + "\nStatus: " + status);
-            var products = (JSON.parse(data)).products;
-            container.innerHTML = renderProducts(products)
+            var orders = data.data.order;
+            container.innerHTML = renderOrders(orders)
         });
     });
 
-    function renderProducts(products) {
-        return '<h1>Product Catalog</h1>' +
-            '<div id="products" class="row list-group">' +
-                products.map(renderSingleProduct).join('\n') +
+    function renderOrders(orders) {
+        return '<h1>Order List</h1>' +
+            '<div id="orders" class="row list-group">' +
+                orders.map(renderOrder).join('\n') +
             '</div>'
     }
 
-    function renderSingleProduct(product) {        
+    function renderOrder(order) {        
         return '<div class="item  col-xs-4 col-lg-4 list-group-item">' +
             '<div class="thumbnail">' +
-                renderImage(product.name) +
-                renderProductDetails(product) +
+                renderImage("Product-Name") +
+                renderOrderDetails(order) +
             '</div>' +
         '</div>'
     }
 
-    function renderProductDetails(product) {
-        return '<div class="caption">' +
-            '<a href="product.html?id=' + product.gtin + '">' +
-            '<h4 class="group inner list-group-item-heading">' + product.name + ' by ' + product.brand + '</h4></a>' +
-            '<p class="group inner list-group-item-text">' + product.description + '</p>' + 
+    function renderOrderDetails(order) {
+        return '<div class="caption">' +            
+            '<h4 class="group inner list-group-item-heading">Order: ' + order.orderId +'</h4>' +
+            '<p class="group inner list-group-item-text">Received order for product ' + order.gtin + ' </p>' +
             '<div class="row">' +
                 '<div class="col-xs-12 col-md-6">' + 
-                    '<a class="btn btn-success" href="/index.html?id=' + product.gtin + '">Show details</a>' +
+                    '<p class="lead">Order Qty: ' + order.orderQty +'</p>' +
                 '</div></div>' +            
             '</div>'
     }
