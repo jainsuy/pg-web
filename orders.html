@@ -137,10 +137,23 @@ font-weight: bold;
         var productOrderServiceUrl = 'https://pgecommerce.azure-api.net/ord/orders';        
         
 		var container = document.getElementById('content');
-        $.get(productOrderServiceUrl, function(data, status){
-            console.log("Data: " + data + "\nStatus: " + status);
-            var orders = data.data.order;
-            container.innerHTML = renderOrders(orders)
+        $.get(productOrderServiceUrl, function(data){
+            //console.log("Data: " + data);
+            if(data && data.data && data.data.order){
+                var orders = data.data.order;
+                container.innerHTML = renderOrders(orders)
+            }            
+            else {
+                container.innerHTML = '<h1>Order List</h1>' +
+                '<div id="orders" class="row list-group">' +
+                    '<p>No orders are available. You can place order for Product details page !!!</p>' +
+                '</div>'
+            }            
+        }).fail( function() {
+            container.innerHTML = '<h1>Order List</h1>' +
+                '<div id="orders" class="row list-group">' +
+                    '<p>Something went wrong. Not able to connect to API!!!</p>' +
+                '</div>';
         });
     });
 
